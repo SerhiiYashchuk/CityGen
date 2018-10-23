@@ -1,14 +1,14 @@
 #ifndef CITYGEN_GRADIENT_H
 #define CITYGEN_GRADIENT_H
 
-#include "IVector2Field.h"
-#include "IScalarField.h"
+#include "Fields/IVectorField.h"
+#include "Fields/IScalarField.h"
 #include <type_traits>
 
 namespace CityGen
 {
 template<class T>
-class Gradient : public IVector2Field
+class Gradient : public IVectorField
 {
 public:
   Gradient(T scalar) : _scalar(scalar)
@@ -16,7 +16,7 @@ public:
     static_assert(std::is_base_of<IScalarField, T>(), "T should conform to IScalarField interface.");
   }
 
-  Vector2 sample(Vector2 pos) override
+  Vector sample(Vector pos) override
   {
     const float v = _scalar.sample(pos);
     const float x = _scalar.sample({ pos.x + 1, pos.y });

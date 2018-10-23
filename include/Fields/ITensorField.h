@@ -2,7 +2,7 @@
 #define CITYGEN_I_TENSOR_FIELD_H
 
 #include "GenericTypes.h"
-#include "Tensor.h"
+#include "Fields/Tensor.h"
 
 namespace CityGen
 {
@@ -11,7 +11,7 @@ class ITensorField
 public:
   virtual ~ITensorField() = default;
 
-  virtual Tensor sample(Vector2 pos) = 0;
+  virtual Tensor sample(Vector pos) = 0;
 };
 }
 

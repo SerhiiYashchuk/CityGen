@@ -10,7 +10,7 @@ class IScalarField
 public:
   virtual ~IScalarField() = default;
 
-  virtual float sample(Vector2 pos) const = 0;
+  virtual float sample(Vector pos) const = 0;
 };
 }
 

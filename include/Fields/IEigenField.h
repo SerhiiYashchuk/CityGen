@@ -1,7 +1,7 @@
 #ifndef CITYGEN_I_EIGEN_FIELD_H
 #define CITYGEN_I_EIGEN_FIELD_H
 
-#include "IVector2Field.h"
+#include "Fields/IVectorField.h"
 
 namespace CityGen
 {
@@ -10,8 +10,8 @@ class IEigenField
 public:
   virtual ~IEigenField() = default;
 
-  const IVector2Field &majorEigenVectors() const = 0;
-  const IVector2Field &minorEigenVectors() const = 0;
+  virtual const IVectorField &majorEigenVectors() const = 0;
+  virtual const IVectorField &minorEigenVectors() const = 0;
 };
 }
 

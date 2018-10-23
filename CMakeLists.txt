@@ -21,16 +21,21 @@ target_include_directories(${PROJECT_NAME}
 target_sources(${PROJECT_NAME}
 	PUBLIC
 		include/GenericTypes.h
-		include/Gradient.h
-		include/GridlineTensorField.h
-		include/IEigenField.h
-		include/IScalarField.h
-		include/ITensorField.h
-		include/IVector2Field.h
-		include/RadialTensorField.h
-		include/ResampleAndRescale.h
-		include/ScaledScalarField.h
-		include/Tensor.h
+		include/Fields/Gradient.h
+		include/Fields/GridlineTensorField.h
+		include/Fields/IEigenField.h
+		include/Fields/IScalarField.h
+		include/Fields/ITensorField.h
+		include/Fields/IVectorField.h
+		include/Fields/RadialTensorField.h
+		include/Fields/ResampleAndRescale.h
+		include/Fields/ScaledScalarField.h
+		include/Fields/Tensor.h
+		include/Tracing/Graph.h
+		include/Tracing/Streamline.h
 	PRIVATE
+		src/Fields/Tensor.cpp
+		src/Tracing/Graph.cpp
+		src/Tracing/Streamline.cpp
 		main.cpp
 )

@@ -1,7 +1,7 @@
 #ifndef CITYGEN_SCALED_SCALAR_FIELD_H
 #define CITYGEN_SCALED_SCALAR_FIELD_H
 
-#include "IScalarField.h"
+#include "Fields/IScalarField.h"
 #include <type_traits>
 
 namespace CityGen
@@ -15,7 +15,7 @@ public:
     static_assert(std::is_base_of<IScalarField, T>(), "T should conform to IScalarField interface.");
   }
 
-  float sample(Vector2 pos) const override
+  float sample(Vector pos) const override
   {
     return _scalar.sample(pos) * _scale;
   }

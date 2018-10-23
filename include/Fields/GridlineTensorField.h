@@ -1,16 +1,16 @@
 #ifndef CITYGEN_GRIDLINE_TENSOR_FIELD_H
 #define CITYGEN_GRIDLINE_TENSOR_FIELD_H
 
-#include "ITensorField.h"
+#include "Fields/ITensorField.h"
 
 namespace CityGen
 {
-class GridlineTesorField : public ITensorField
+class GridlineTensorField : public ITensorField
 {
 public:
   GridlineTensorField(float angle, float length) : _basis(Tensor::fromRTheta(angle, length)) {}
 
-  Tensor sample(Vector2 pos) override
+  Tensor sample(Vector pos) override
   {
     return _basis;
   }
