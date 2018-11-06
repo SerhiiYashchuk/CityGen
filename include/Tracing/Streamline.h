@@ -7,9 +7,6 @@
 
 namespace CityGen
 {
-class Edge;
-class Streamline;
-
 class Streamline
 {
 public:

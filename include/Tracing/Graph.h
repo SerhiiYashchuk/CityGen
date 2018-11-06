@@ -12,7 +12,7 @@ class Edge;
 class Vertex
 {
 public:
-  Vertex(Vector pos);
+  explicit Vertex(Vector pos);
 
   Vector getPos() const
   {
@@ -54,12 +54,12 @@ public:
 
   const std::shared_ptr<Vertex> &getA() const
   {
-    return _a;
+    return _a.lock();
   }
 
   const std::shared_ptr<Vertex> &getB() const
   {
-    return _b;
+    return _b.lock();
   }
 
   Vector getDirection() const
@@ -67,9 +67,19 @@ public:
     return _direction;
   }
 
+  bool operator==(const Edge &rhs) const
+  {
+    return _a.lock() == rhs._a.lock() && _b.lock() == rhs._b.lock() && _direction == rhs._direction;
+  }
+
+  bool operator!=(const Edge &rhs) const
+  {
+    return !(*this == rhs);
+  }
+
 private:
-  std::shared_ptr<Vertex> _a;
-  std::shared_ptr<Vertex> _b;
+  std::weak_ptr<Vertex> _a;
+  std::weak_ptr<Vertex> _b;
   Vector _direction;
 };
 

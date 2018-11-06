@@ -32,10 +32,14 @@ target_sources(${PROJECT_NAME}
 		include/Fields/ScaledScalarField.h
 		include/Fields/Tensor.h
 		include/Tracing/Graph.h
+		include/Tracing/Region.h
+		include/Tracing/RegionBuilder.h
 		include/Tracing/Streamline.h
 	PRIVATE
 		src/Fields/Tensor.cpp
 		src/Tracing/Graph.cpp
+		src/Tracing/Region.cpp
+		src/Tracing/RegionBuilder.cpp
 		src/Tracing/Streamline.cpp
 		main.cpp
 )

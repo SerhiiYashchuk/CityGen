@@ -24,20 +24,20 @@ bool Vertex::removeEdge(const Edge &edge)
 Edge::Edge(const std::shared_ptr<Vertex> &a, const std::shared_ptr<Vertex> &b)
   : _a(a), _b(b)
 {
-  if (_a == nullptr || _b == nullptr)
+  if (a == nullptr || b == nullptr)
   {
     throw std::invalid_argument{ "Vertices should not be nullptr." };
   }
 
-  if (*_a == *_b)
+  if (*a == *b)
   {
     throw std::invalid_argument{ "Cannot create an edge with two identical vertices." };
   }
 
-  _direction = { _b->getPos() - _a->getPos() };
+  _direction = { b->getPos() - a->getPos() };
 
   _direction.normalize();
-  _a->addEdge(*this);
-  _b->addEdge(*this);
+  a->addEdge(*this);
+  b->addEdge(*this);
 }
 }
