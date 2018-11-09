@@ -7,6 +7,19 @@ Vertex::Vertex(Vector pos)
 {
 }
 
+Vertex::~Vertex()
+{
+  for (const auto &edge : _edges)
+  {
+    const auto &oppositeVertex = edge.getA().get() == this ? edge.getB() : edge.getA();
+
+    if (oppositeVertex != nullptr)
+    {
+      oppositeVertex->removeEdge(edge);
+    }
+  }
+}
+
 bool Vertex::removeEdge(const Edge &edge)
 {
   const auto it = std::find(std::begin(_edges), std::end(_edges), edge);

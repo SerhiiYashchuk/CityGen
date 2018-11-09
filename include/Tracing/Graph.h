@@ -13,6 +13,7 @@ class Vertex
 {
 public:
   explicit Vertex(Vector pos);
+  ~Vertex();
 
   Vector getPos() const
   {

@@ -27,7 +27,7 @@ void Tensor::normalize()
 {
   const float l = std::sqrt(_a * _a + _b * _b);
 
-  if (l < std::numeric_limits<float>::epsilon())
+  if (l < Utils::floatEpsilon)
   {
     _a = 0;
     _b = 0;
@@ -51,9 +51,9 @@ std::pair<Vector, Vector> Tensor::eigenVectors() const
   Vector major;
   Vector minor;
 
-  if (std::abs(_b) == 0)
+  if (Utils::almostEqual(std::abs(_b), 0.f))
   {
-    if (std::abs(_a) != 0)
+    if (!Utils::almostEqual(std::abs(_a), 0.f))
     {
       major = { 1, 0 };
       minor = { 0, 1 };

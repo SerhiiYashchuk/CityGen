@@ -5,7 +5,6 @@
 #include <vector>
 #include <tuple>
 #include <algorithm>
-#include <limits>
 #include <type_traits>
 
 namespace CityGen
@@ -35,7 +34,7 @@ private:
 
   ResampleAndRescale(Vector2d majorVectors, Vector min, Vector max)
     : _majorEigenVectors(majorVectors), _min(min), _size(max - min),
-      _isZeroSize(std::abs(_size.x) < std::numeric_limits<float>::epsilon() || std::abs(_size.y) < std::numeric_limits<float>::epsilon())
+      _isZeroSize(std::abs(_size.x) < Utils::floatEpsilon || std::abs(_size.y) < Utils::floatEpsilon)
   {
     static_assert(std::is_base_of<IVectorField, T>(), "T should conform to IVectorField interface.");
     assert(!_isZeroSize);

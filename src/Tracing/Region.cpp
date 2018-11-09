@@ -15,7 +15,7 @@ Orientation orientation(CityGen::Vector begin, CityGen::Vector end, CityGen::Vec
 {
   const float val = (p.y - begin.y) * (end.x - p.x) - (p.x - begin.x) * (end.y - p.y);
 
-  if (val == 0)
+  if (CityGen::Utils::almostEqual(val, 0.f))
   {
     return Orientation::Colinear;
   }

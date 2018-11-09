@@ -2,9 +2,23 @@
 #define CITYGEN_GENERIC_TYPES_H
 
 #include <cmath>
+#include <type_traits>
+#include <limits>
 
 namespace CityGen
 {
+namespace Utils
+{
+constexpr float floatEpsilon = 0.0000001f;
+
+template<class T>
+typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
+almostEqual(T x, T y, float epsilon = floatEpsilon)
+{
+  return std::abs(x - y) < epsilon;
+}
+}
+
 struct Vector
 {
   float x = 0;
@@ -12,7 +26,12 @@ struct Vector
 
   bool operator==(const Vector &rhs) const
   {
-    return x == rhs.x && y == rhs.y;
+    return Utils::almostEqual(x, rhs.x) && Utils::almostEqual(y, rhs.y);
+  }
+
+  bool operator!=(const Vector &rhs) const
+  {
+    return !(*this == rhs);
   }
 
   Vector operator+(const Vector &rhs) const
@@ -102,7 +121,7 @@ struct Vector
   {
     const float l = length();
 
-    if (l != 0)
+    if (!Utils::almostEqual(l, 0.f))
     {
       x /= l;
       y /= l;
