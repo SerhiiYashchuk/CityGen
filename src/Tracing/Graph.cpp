@@ -2,6 +2,14 @@
 
 namespace CityGen
 {
+namespace Utils
+{
+std::pair<Edge, Edge> splitEdge(const Edge &edge, const std::shared_ptr<Vertex> &mid)
+{
+  return { Edge{ edge.getA(), mid }, Edge{ mid, edge.getB() } };
+}
+}
+
 Vertex::Vertex(Vector pos)
   : _pos(pos)
 {

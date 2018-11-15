@@ -40,28 +40,10 @@ public:
   Edge extand(const std::shared_ptr<Vertex> &vertex);
 
 private:
-  struct Hash
-  {
-    template<class T>
-    std::size_t operator()(const std::shared_ptr<T> &p) const
-    {
-      return std::hash<T>()(*p);
-    }
-  };
-
-  struct Compare
-  {
-    template<class T>
-    bool operator()(const std::shared_ptr<T> &lhs, const std::shared_ptr<T> &rhs) const
-    {
-      return *lhs == *rhs;
-    }
-  };
-
   std::shared_ptr<Vertex> _first;
   std::shared_ptr<Vertex> _last;
 
-  std::unordered_set<std::shared_ptr<Vertex>, Hash, Compare> _vertices;
+  std::unordered_set<std::shared_ptr<Vertex>> _vertices;
 };
 }
 

@@ -53,12 +53,12 @@ class Edge
 public:
   Edge(const std::shared_ptr<Vertex> &a, const std::shared_ptr<Vertex> &b);
 
-  const std::shared_ptr<Vertex> &getA() const
+  std::shared_ptr<Vertex> getA() const
   {
     return _a.lock();
   }
 
-  const std::shared_ptr<Vertex> &getB() const
+  std::shared_ptr<Vertex> getB() const
   {
     return _b.lock();
   }
@@ -86,10 +86,7 @@ private:
 
 namespace Utils
 {
-std::pair<Edge, Edge> splitEdge(const Edge &edge, const std::shared_ptr<Vertex> &mid)
-{
-  return { Edge{ edge.getA(), mid }, Edge{ mid, edge.getB() } };
-}
+std::pair<Edge, Edge> splitEdge(const Edge &edge, const std::shared_ptr<Vertex> &mid);
 }
 }
 

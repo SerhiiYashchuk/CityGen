@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.8)
+﻿cmake_minimum_required(VERSION 3.11)
 
 project("CityGen")
 
@@ -18,6 +18,11 @@ target_include_directories(${PROJECT_NAME}
 		src
 )
 
+target_compile_features(${PROJECT_NAME}
+	PUBLIC
+		cxx_std_17
+)
+
 target_sources(${PROJECT_NAME}
 	PUBLIC
 		include/GenericTypes.h
@@ -33,13 +38,14 @@ target_sources(${PROJECT_NAME}
 		include/Fields/Tensor.h
 		include/Tracing/Graph.h
 		include/Tracing/Region.h
-		include/Tracing/RegionBuilder.h
+		#include/Tracing/RegionBuilder.h
 		include/Tracing/Streamline.h
 	PRIVATE
+		src/GenericTypes.cpp
 		src/Fields/Tensor.cpp
 		src/Tracing/Graph.cpp
 		src/Tracing/Region.cpp
-		src/Tracing/RegionBuilder.cpp
+		#src/Tracing/RegionBuilder.cpp
 		src/Tracing/Streamline.cpp
 		main.cpp
 )

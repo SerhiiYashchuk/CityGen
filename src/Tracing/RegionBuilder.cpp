@@ -70,7 +70,7 @@ std::optional<std::pair<CityGen::Edge, bool>> walkNextEdge(const CityGen::Edge &
       return std::make_pair(next, streight);
     }
 
-    const CityGen::Vector direction = edge.getDirection() * (moveStreight ? 1 : -1);
+    const CityGen::Vector direction = edge.getDirection() * (moveStreight ? 1.f : -1.f);
 
     for (const auto &e : edges)
     {
@@ -80,7 +80,7 @@ std::optional<std::pair<CityGen::Edge, bool>> walkNextEdge(const CityGen::Edge &
       }
 
       const bool isStart = e.getA() == vertex;
-      const float angle = signedAngle(direction, e.getDirection() * (isStart ? 1 : -1));
+      const float angle = signedAngle(direction, e.getDirection() * (isStart ? 1.f : -1.f));
     }
 
     const auto minIt = std::min_element(std::begin(edges), std::end(edges),
