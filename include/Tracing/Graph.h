@@ -2,92 +2,46 @@
 #define CITYGEN_GRAPH_H
 
 #include "GenericTypes.h"
+#include <boost/graph/adjacency_list.hpp>
 #include <vector>
-#include <memory>
+#include <optional>
 
 namespace CityGen
 {
-class Edge;
-
-class Vertex
+class Graph
 {
 public:
-  explicit Vertex(Vector pos);
-  ~Vertex();
+  using VertexData = Vector;
+  using UnderlyingGraph = boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VertexData>;
+  using VDescriptor = typename boost::graph_traits<UnderlyingGraph>::vertex_descriptor;
+  using EDescriptor = typename boost::graph_traits<UnderlyingGraph>::edge_descriptor;
 
-  Vector getPos() const
-  {
-    return _pos;
-  }
+  Graph() = default;
+  Graph(const std::vector<VertexData> &verticesData);
 
-  const std::vector<Edge> &getEdges() const
-  {
-    return _edges;
-  }
+  VDescriptor addVertex(const VertexData &vertexData);
+  void removeVertex(VDescriptor vertex);
+  std::vector<VDescriptor> getVertices() const;
+  std::size_t getVerticesCount() const;
 
-  void addEdge(const Edge &edge)
-  {
-    _edges.push_back(edge);
-  }
+  std::vector<VDescriptor> getAdjacentVertices(VDescriptor vertex) const;
 
-  bool removeEdge(const Edge &edge);
+  VertexData &getData(VDescriptor vertex);
+  const VertexData &getData(VDescriptor vertex) const;
 
-  std::size_t getEdgesCount() const
-  {
-    return _edges.size();
-  }
+  EDescriptor addEdge(VDescriptor vertex1, VDescriptor vertex2);
+  void removeEdge(EDescriptor edge);
+  void removeEdge(VDescriptor vertex1, VDescriptor vertex2);
+  std::optional<EDescriptor> getEdge(VDescriptor vertex1, VDescriptor vertex2) const;
+  std::vector<EDescriptor> getEdges() const;
+  std::size_t getEdgesCount() const;
 
-  bool operator==(const Vertex &rhs) const
-  {
-    return _pos == rhs._pos && _edges == rhs._edges;
-  }
+  VDescriptor getSource(EDescriptor edge) const;
+  VDescriptor getTarget(EDescriptor edge) const;
 
 private:
-  const Vector _pos;
-
-  std::vector<Edge> _edges;
+  UnderlyingGraph _graph;
 };
-
-class Edge
-{
-public:
-  Edge(const std::shared_ptr<Vertex> &a, const std::shared_ptr<Vertex> &b);
-
-  std::shared_ptr<Vertex> getA() const
-  {
-    return _a.lock();
-  }
-
-  std::shared_ptr<Vertex> getB() const
-  {
-    return _b.lock();
-  }
-
-  Vector getDirection() const
-  {
-    return _direction;
-  }
-
-  bool operator==(const Edge &rhs) const
-  {
-    return _a.lock() == rhs._a.lock() && _b.lock() == rhs._b.lock() && _direction == rhs._direction;
-  }
-
-  bool operator!=(const Edge &rhs) const
-  {
-    return !(*this == rhs);
-  }
-
-private:
-  std::weak_ptr<Vertex> _a;
-  std::weak_ptr<Vertex> _b;
-  Vector _direction;
-};
-
-namespace Utils
-{
-std::pair<Edge, Edge> splitEdge(const Edge &edge, const std::shared_ptr<Vertex> &mid);
-}
 }
 
 #endif

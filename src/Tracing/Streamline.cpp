@@ -4,30 +4,28 @@
 
 namespace CityGen
 {
-Streamline::Streamline(const std::shared_ptr<Vertex> &start)
-  : _first(start), _last(start)
+Streamline::Streamline(const Graph &graph, Graph::VDescriptor start)
+  : _first(start), _last(start), _graph(graph)
 {
 }
 
-Edge Streamline::extand(const std::shared_ptr<Vertex> &vertex)
+std::pair<Graph::VDescriptor, Graph::VDescriptor> Streamline::extend(Graph::VDescriptor vertex)
 {
   if (vertex != _first && !addVertex(vertex))
   {
     assert(false);
   }
 
-  const auto &a = _last;
-  const auto &b = vertex;
+  const auto a = _last;
+  const auto b = vertex;
+  const auto adjacent = _graph.getAdjacentVertices(_last);
 
-  if (std::any_of(std::begin(a->getEdges()), std::end(a->getEdges()), [a, b](const Edge &edge)
-  {
-    return a == edge.getA() && b == edge.getB() || a == edge.getB() && b == edge.getA();
-  }))
+  if (std::find(std::begin(adjacent), std::end(adjacent), vertex) != std::end(adjacent))
   {
     assert(false);
   }
 
-  _last = b;
+  _last = vertex;
 
   return { a, b };
 }

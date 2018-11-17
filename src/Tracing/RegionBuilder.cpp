@@ -5,7 +5,10 @@
 
 namespace
 {
-float signedAngle(CityGen::Vector v1, CityGen::Vector v2)
+using Vector = CityGen::Vector;
+using Graph = CityGen::Graph;
+
+float signedAngle(Vector v1, Vector v2)
 {
   const float dotProduct = CityGen::Utils::dotProduct(v1, v2);
   const float cross = v1.x * v2.y - v1.y * v2.x;
@@ -13,7 +16,7 @@ float signedAngle(CityGen::Vector v1, CityGen::Vector v2)
   return std::atan2(cross, dotProduct);
 }
 
-void removeDeadEnds(std::vector<std::shared_ptr<CityGen::Vertex>> &vertices)
+void removeDeadEnds(std::vector<Graph::VDescriptor> &vertices)
 {
   // First step: remove consecutive copies of the same vertices
   // TODO: should we compare exact vertices instead of pointers?
@@ -40,80 +43,13 @@ void removeDeadEnds(std::vector<std::shared_ptr<CityGen::Vertex>> &vertices)
     }
   }
 }
-
-std::optional<std::pair<CityGen::Edge, bool>> walkNextEdge(const CityGen::Edge &edge, bool moveStreight = true)
-{
-  std::optional<std::pair<CityGen::Edge, bool>> nextEdge;
-  auto vertex = moveStreight ? edge.getB() : edge.getA();
-
-  if (vertex != nullptr)
-  {
-    const std::size_t edgesCount = vertex->getEdgesCount();
-
-    if (edgesCount == 0)
-    {
-      return nextEdge;
-    }
-
-    if (edgesCount == 1)
-    {
-      return std::make_pair(edge, !moveStreight);
-    }
-
-    const auto &edges = vertex->getEdges();
-
-    if (edgesCount == 2)
-    {
-      const auto &next = edges.front() == edge ? edges.back() : edges.front();
-      const bool streight = next.getA() == vertex;
-
-      return std::make_pair(next, streight);
-    }
-
-    const CityGen::Vector direction = edge.getDirection() * (moveStreight ? 1.f : -1.f);
-
-    for (const auto &e : edges)
-    {
-      if (e == edge)
-      {
-        continue;
-      }
-
-      const bool isStart = e.getA() == vertex;
-      const float angle = signedAngle(direction, e.getDirection() * (isStart ? 1.f : -1.f));
-    }
-
-    const auto minIt = std::min_element(std::begin(edges), std::end(edges),
-    [direction, &edge, &vertex](const auto &lhs, const auto &rhs)
-    {
-      if (lhs == edge)
-      {
-        return false;
-      }
-
-      const bool lhsStreight = lhs.getA() == vertex;
-      const bool rhsStreight = rhs.getA() == vertex;
-      const float angleToLhs = signedAngle(direction, lhs.getDirection() * (lhsStreight ? 1 : -1));
-      const float angleToRhs = signedAngle(direction, rhs.getDirection() * (rhsStreight ? 1 : -1));
-
-      return angleToLhs < angleToRhs;
-    });
-    nextEdge = std::make_pair(*minIt, minIt->getA() == vertex);
-  }
-
-  return nextEdge;
-}
 }
 
 namespace CityGen
 {
-RegionBuilder::RegionBuilder(const std::vector<Vertex> &vertices)
+RegionBuilder::RegionBuilder(const Graph &graph) : _graph(graph)
 {
-  std::for_each(std::begin(vertices), std::end(vertices), [this](const Vertex &vertex)
-  {
-    std::copy(std::begin(vertex.getEdges()), std::end(vertex.getEdges()),
-    std::inserter(_unprocessedEdges, std::end(_unprocessedEdges)));
-  });
+  
 }
 
 const std::vector<Region> &RegionBuilder::getRegions()
@@ -155,7 +91,7 @@ void RegionBuilder::buildRegions()
   _regionsBuilt = true;
 }
 
-std::optional<Region> RegionBuilder::walkRegionBoundary(const Edge &start, bool moveStreight)
+std::optional<Region> RegionBuilder::walkRegionBoundary(Graph::EDescriptor start, bool moveStreight)
 {
   // TODO: implement
   /*
@@ -169,23 +105,27 @@ std::optional<Region> RegionBuilder::walkRegionBoundary(const Edge &start, bool 
   */
 
   std::optional<Region> region;
-  std::vector<std::shared_ptr<Vertex>> vertices;
-  Edge e = start;
+  std::vector<Graph::VDescriptor> vertices;
+  Graph::EDescriptor e = start;
 
   do
   {
-    if (_unprocessedEdges.erase(e) != 0)
+    // TODO: consider using swap() and pop_back() to delete elements
+    const auto upIt = std::find(std::begin(_unprocessedEdges), std::end(_unprocessedEdges), e);
+
+    if (upIt != std::end(_unprocessedEdges))
     {
+      _unprocessedEdges.erase(upIt);
       _halfProcessedEdges.emplace_back(e, !moveStreight);
     }
     else
     {
-      const auto it = std::find(std::begin(_halfProcessedEdges), std::end(_halfProcessedEdges),
+      const auto hpIt = std::find(std::begin(_halfProcessedEdges), std::end(_halfProcessedEdges),
         std::make_pair(e, moveStreight));
       
-      if (it != std::end(_halfProcessedEdges))
+      if (hpIt != std::end(_halfProcessedEdges))
       {
-        _halfProcessedEdges.erase(it);
+        _halfProcessedEdges.erase(hpIt);
       }
       else
       {
@@ -193,10 +133,7 @@ std::optional<Region> RegionBuilder::walkRegionBoundary(const Edge &start, bool 
       }
     }
 
-    const auto &vertex = moveStreight ? e.getB() : e.getA();
-
-    assert(vertex != nullptr);
-    vertices.emplace_back(vertex);
+    vertices.push_back(moveStreight ? _graph.getTarget(e) : _graph.getSource(e));
 
     if (auto next = walkNextEdge(e, moveStreight))
     {
@@ -217,12 +154,85 @@ std::optional<Region> RegionBuilder::walkRegionBoundary(const Edge &start, bool 
 
     for (const auto &vertex : vertices)
     {
-      points.emplace_back(vertex->getPos());
+      points.push_back(_graph.getData(vertex));
     }
 
     region = Region{ points };
   }
 
   return region;
+}
+
+std::optional<std::pair<Graph::EDescriptor, bool>> RegionBuilder::walkNextEdge(Graph::EDescriptor edge,
+  bool moveStreight)
+{
+  std::optional<std::pair<Graph::EDescriptor, bool>> nextEdge;
+
+  const auto source = _graph.getSource(edge);
+  const auto target = _graph.getTarget(edge);
+  const auto vertex = moveStreight ? target : source;
+  const auto opposite = moveStreight ? source : target;
+  const auto adjVertices = _graph.getAdjacentVertices(vertex);
+  const std::size_t edgesCount = adjVertices.size();
+
+  switch (edgesCount)
+  {
+    case 0:
+      break;
+
+    case 1:
+      nextEdge = std::make_pair(edge, !moveStreight);
+      break;
+
+    case 2:
+    {
+      const auto nextVertex = adjVertices.front() == opposite ? adjVertices.back() : adjVertices.front();
+      const auto e = _graph.getEdge(vertex, nextVertex);
+      const bool streight = _graph.getSource(*e) == vertex;
+
+      nextEdge = std::make_pair(*e, streight);
+    }
+      break;
+
+    default:
+    {
+      Vector direction = (_graph.getData(target) - _graph.getData(source)) * (moveStreight ? 1.f : -1.f);
+
+     direction.normalize();
+
+      const auto minIt = std::min_element(std::begin(adjVertices), std::end(adjVertices),
+      [direction, vertex, opposite, this](const auto lhs, const auto rhs)
+      {
+        // If a vertex is one of passed in edge's ends
+        if (lhs == opposite)
+        {
+          return false;
+        }
+
+        const auto lhsEdge = _graph.getEdge(vertex, lhs);
+        const auto lhsSource = _graph.getSource(*lhsEdge);
+        const auto lhsTarget = lhsSource == vertex ? lhs : vertex;
+        const bool lhsStreight = lhsSource == vertex;
+        const Vector lhsDirection = (_graph.getData(lhsTarget) - _graph.getData(lhsSource))
+          * (lhsStreight ? 1.f : -1.f);
+        const float angleToLhs = signedAngle(direction, lhsDirection * (lhsStreight ? 1.f : -1.f));
+
+        const auto rhsEdge = _graph.getEdge(vertex, rhs);
+        const auto rhsSource = _graph.getSource(*rhsEdge);
+        const auto rhsTarget = rhsSource == vertex ? rhs : vertex;
+        const bool rhsStreight = rhsSource == vertex;
+        const Vector rhsDirection = (_graph.getData(rhsTarget) - _graph.getData(rhsSource))
+          * (rhsStreight ? 1.f : -1.f);
+        const float angleToRhs = signedAngle(direction, rhsDirection * (rhsStreight ? 1.f : -1.f));
+
+        return angleToLhs < angleToRhs;
+      });
+
+      const auto e = _graph.getEdge(vertex, *minIt);
+      nextEdge = std::make_pair(*e, _graph.getSource(*e) == vertex);
+    }
+  }
+
+  return nextEdge;
 }
 }

@@ -3,7 +3,6 @@
 
 #include "Tracing/Graph.h"
 #include "Tracing/Region.h"
-#include <unordered_set>
 #include <optional>
 
 namespace CityGen
@@ -11,17 +10,20 @@ namespace CityGen
 class RegionBuilder
 {
 public:
-  RegionBuilder(const std::vector<Vertex> &vertices);
+  RegionBuilder(const Graph &graph);
 
   const std::vector<Region> &getRegions();
 
 private:
   void buildRegions();
-  std::optional<Region> walkRegionBoundary(const Edge &start, bool moveStreight = true);
+  std::optional<Region> walkRegionBoundary(Graph::EDescriptor start, bool moveStreight = true);
+  std::optional<std::pair<Graph::EDescriptor, bool>> walkNextEdge(Graph::EDescriptor edge,
+    bool moveStreight = true);
 
-  std::unordered_set<Edge> _unprocessedEdges;
-  std::vector<std::pair<Edge, bool>> _halfProcessedEdges;
+  std::vector<Graph::EDescriptor> _unprocessedEdges;
+  std::vector<std::pair<Graph::EDescriptor, bool>> _halfProcessedEdges;
   std::vector<Region> _regions;
+  const Graph &_graph;
   bool _regionsBuilt = false;
 };
 }
