@@ -2,63 +2,127 @@
 
 namespace CityGen
 {
-namespace Utils
+Graph::Graph(const std::vector<Graph::VertexData> &verticesData)
 {
-std::pair<Edge, Edge> splitEdge(const Edge &edge, const std::shared_ptr<Vertex> &mid)
-{
-  return { Edge{ edge.getA(), mid }, Edge{ mid, edge.getB() } };
-}
-}
-
-Vertex::Vertex(Vector pos)
-  : _pos(pos)
-{
-}
-
-Vertex::~Vertex()
-{
-  for (const auto &edge : _edges)
+  for (const auto &data : verticesData)
   {
-    const auto &oppositeVertex = edge.getA().get() == this ? edge.getB() : edge.getA();
-
-    if (oppositeVertex != nullptr)
-    {
-      oppositeVertex->removeEdge(edge);
-    }
+    boost::add_vertex(data, _graph);
   }
 }
 
-bool Vertex::removeEdge(const Edge &edge)
+Graph::VDescriptor Graph::addVertex(const Graph::VertexData &vertexData)
 {
-  const auto it = std::find(std::begin(_edges), std::end(_edges), edge);
-  bool res = false;
-
-  if (it != std::end(_edges))
-  {
-    _edges.erase(it);
-    res = true;
-  }
-
-  return res;
+  return boost::add_vertex(vertexData, _graph);
 }
 
-Edge::Edge(const std::shared_ptr<Vertex> &a, const std::shared_ptr<Vertex> &b)
-  : _a(a), _b(b)
+void Graph::removeVertex(Graph::VDescriptor vertex)
 {
-  if (a == nullptr || b == nullptr)
+  boost::clear_vertex(vertex, _graph);
+  boost::remove_vertex(vertex, _graph);
+}
+
+std::vector<Graph::VDescriptor> Graph::getVertices() const
+{
+  std::vector<Graph::VDescriptor> vertices;
+
+  const auto vert = boost::vertices(_graph);
+
+  for (auto begin = vert.first, end = vert.second; begin != end; ++begin)
   {
-    throw std::invalid_argument{ "Vertices should not be nullptr." };
+    vertices.push_back(*begin);
   }
 
-  if (*a == *b)
+  return vertices;
+}
+
+std::size_t Graph::getVerticesCount() const
+{
+  return boost::num_vertices(_graph);
+}
+
+std::vector<Graph::VDescriptor> Graph::getAdjacentVertices(Graph::VDescriptor vertex) const
+{
+  std::vector<Graph::VDescriptor> adjacent;
+
+  const auto adj = boost::adjacent_vertices(vertex, _graph);
+
+  for (auto begin = adj.first, end = adj.second; begin != end; ++begin)
   {
-    throw std::invalid_argument{ "Cannot create an edge with two identical vertices." };
+    adjacent.push_back(*begin);
   }
 
-  _direction = { b->getPos() - a->getPos() };
+  /*std::for_each(adj.first, adj.second, [&adjacent](const auto &it)
+  {
+    adjacent.push_back(*it);
+  });*/
 
-  _direction.normalize();
-  a->addEdge(*this);
-  b->addEdge(*this);
+  return adjacent;
+}
+
+Graph::VertexData &Graph::getData(Graph::VDescriptor vertex)
+{
+  return _graph[vertex];
+}
+
+const Graph::VertexData &Graph::getData(Graph::VDescriptor vertex) const
+{
+  return _graph[vertex];
+}
+
+Graph::EDescriptor Graph::addEdge(Graph::VDescriptor vertex1, Graph::VDescriptor vertex2)
+{
+  return boost::add_edge(vertex1, vertex2, _graph).first;
+}
+
+void Graph::removeEdge(Graph::EDescriptor edge)
+{
+  boost::remove_edge(edge, _graph);
+}
+
+void Graph::removeEdge(Graph::VDescriptor vertex1, Graph::VDescriptor vertex2)
+{
+  boost::remove_edge(vertex1, vertex2, _graph);
+}
+
+std::optional<Graph::EDescriptor> Graph::getEdge(Graph::VDescriptor vertex1, Graph::VDescriptor vertex2) const
+{
+  std::optional<Graph::EDescriptor> edge;
+  const auto pair = boost::edge(vertex1, vertex2, _graph);
+
+  if (pair.second)
+  {
+    edge = pair.first;
+  }
+
+  return edge;
+}
+
+std::vector<Graph::EDescriptor> Graph::getEdges() const
+{
+  std::vector<Graph::EDescriptor> edges;
+
+  const auto e = boost::edges(_graph);
+
+  for (auto begin = e.first, end = e.second; begin != end; ++begin)
+  {
+    edges.push_back(*begin);
+  }
+
+  return edges;
+}
+
+std::size_t Graph::getEdgesCount() const
+{
+  return boost::num_edges(_graph);
+}
+
+Graph::VDescriptor Graph::getSource(Graph::EDescriptor edge) const
+{
+  return boost::source(edge, _graph);
+}
+
+Graph::VDescriptor Graph::getTarget(Graph::EDescriptor edge) const
+{
+  return boost::target(edge, _graph);
 }
 }

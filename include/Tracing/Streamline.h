@@ -4,46 +4,48 @@
 #include "GenericTypes.h"
 #include "Tracing/Graph.h"
 #include <unordered_set>
+#include <utility>
 
 namespace CityGen
 {
 class Streamline
 {
 public:
-  Streamline(const std::shared_ptr<Vertex> &start);
+  Streamline(const Graph &graph, Graph::VDescriptor start);
 
-  const std::shared_ptr<Vertex> &getFirst() const
+  Graph::VDescriptor getFirst() const
   {
     return _first;
   }
 
-  const std::shared_ptr<Vertex> &getLast() const
+  Graph::VDescriptor getLast() const
   {
     return _last;
   }
 
-  bool addVertex(const std::shared_ptr<Vertex> &vertex)
+  bool addVertex(Graph::VDescriptor vertex)
   {
     return _vertices.insert(vertex).second;
   }
 
-  bool removeVertex(const std::shared_ptr<Vertex> &vertex)
+  bool removeVertex(Graph::VDescriptor vertex)
   {
     return _vertices.erase(vertex) != 0;
   }
 
-  bool containsVertex(const std::shared_ptr<Vertex> &vertex) const
+  bool containsVertex(Graph::VDescriptor vertex) const
   {
     return _vertices.find(vertex) != std::end(_vertices);
   }
 
-  Edge extand(const std::shared_ptr<Vertex> &vertex);
+  std::pair<Graph::VDescriptor, Graph::VDescriptor> extend(Graph::VDescriptor vertex);
 
 private:
-  std::shared_ptr<Vertex> _first;
-  std::shared_ptr<Vertex> _last;
+  Graph::VDescriptor _first;
+  Graph::VDescriptor _last;
+  std::unordered_set<Graph::VDescriptor> _vertices;
 
-  std::unordered_set<std::shared_ptr<Vertex>> _vertices;
+  const Graph &_graph;
 };
 }
 
