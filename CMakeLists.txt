@@ -11,12 +11,18 @@ else()
 	target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
+find_package(Catch2 CONFIG REQUIRED)
+
 target_include_directories(${PROJECT_NAME}
+ 
 	PUBLIC
 		include
 	PRIVATE
 		src
+		test
 )
+
+target_link_libraries(${PROJECT_NAME} PRIVATE Catch2::Catch2)
 
 target_compile_features(${PROJECT_NAME}
 	PUBLIC
@@ -47,5 +53,6 @@ target_sources(${PROJECT_NAME}
 		src/Tracing/Region.cpp
 		#src/Tracing/RegionBuilder.cpp
 		src/Tracing/Streamline.cpp
+		test/GenericTypesTests.cpp
 		main.cpp
 )
