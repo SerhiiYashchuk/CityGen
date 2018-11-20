@@ -1,7 +1,5 @@
-#define CATCH_CONFIG_MAIN
-
 #include "GenericTypes.h"
-#include "catch.hpp"
+#include <catch2/catch.hpp>
 
 inline float vectorLength(float x, float y)
 {
@@ -40,12 +38,12 @@ TEST_CASE("Vector lenght", "[vector]")
   {
     for (int i = -5; i < 5; i++)
     {
-      vector.x = i;
+      vector.x = static_cast<float>(i);
       for (int j = -5; j < 5; j++)
       {
-        vector.y = j;
+        vector.y = static_cast<float>(j);
 
-        REQUIRE(vector.length() == vectorLength(i, j));
+        REQUIRE(vector.length() == vectorLength(static_cast<float>(i), static_cast<float>(j)));
     }
     }
 
@@ -67,16 +65,16 @@ TEST_CASE("Vectors equality", "[vector]")
 
   SECTION("0.99 == 0.99")
   {
-    A.x = B.x = 0.99;
-    A.y = B.y = 0.99;
+    A.x = B.x = 0.99f;
+    A.y = B.y = 0.99f;
 
     REQUIRE(A == B);
   }
   
   SECTION("-0.99 == -0.99")
   {
-    A.x = B.x = -0.99;
-    A.y = B.y = -0.99;
+    A.x = B.x = -0.99f;
+    A.y = B.y = -0.99f;
 
     REQUIRE(A == B);
   }
@@ -84,7 +82,7 @@ TEST_CASE("Vectors equality", "[vector]")
   SECTION("0 == 0; 0.99 == 0.99")
   {
     A.x = B.x = 0;
-    A.y = B.y = 0.99;
+    A.y = B.y = 0.99f;
 
     REQUIRE(A == B);
   }
@@ -99,15 +97,15 @@ TEST_CASE("Vectors inequality", "[vector]")
   SECTION("0 != 0.99")
   {
     A.x = A.y = 0;
-    B.x = B.y = 0.99;
+    B.x = B.y = 0.99f;
 
     REQUIRE(A != B);
   }
 
   SECTION("-0.99 != 0.99")
   {
-    A.x = A.y = -0.99;
-    B.x = B.y = 0.99;
+    A.x = A.y = -0.99f;
+    B.x = B.y = 0.99f;
 
     REQUIRE(A != B);
   }
@@ -115,9 +113,9 @@ TEST_CASE("Vectors inequality", "[vector]")
   SECTION("0 != 0.99; 0.99 != 0")
   {
     A.x = 0;
-    B.x = 0.99;
+    B.x = 0.99f;
 
-    A.y = 0.99;
+    A.y = 0.99f;
     B.y = 0;
 
     REQUIRE(A != B);
