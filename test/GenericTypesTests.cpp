@@ -1,4 +1,4 @@
-#include "GenericTypes.h"
+#include "Hyperstreamline/GenericTypes.h"
 #include <catch2/catch.hpp>
 
 inline float vectorLength(float x, float y)
