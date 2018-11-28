@@ -25,6 +25,7 @@ add_test(NAME All COMMAND ${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME}
 	PRIVATE
+		Fields/RegionTests.cpp
 		GenericTypesTests.cpp
 		main.cpp
 )
