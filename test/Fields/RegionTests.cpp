@@ -1,13 +1,12 @@
 #include <catch2/catch.hpp>
 #include "Tracing/Region.h"
 #include "GenericTypes.h"
-#include <iostream>
 
 TEST_CASE("Region constructor + getMin() + getMax() tests", "[region]")
 {
   SECTION("Regions must be empty")
   {
-	CityGen::Region region({});
+  CityGen::Region region({});
 
     REQUIRE(region.getVertices().size() == 0);
   }
@@ -31,11 +30,11 @@ TEST_CASE("Region flip tests", "[region]")
   SECTION("Region [(2.2f, 2.2f), (1.1f, 1.1f), (0,0)] must be flipped to [(0,0), (1.1f, 1.1f), (2.2f, 2.2f)]")
   {
     CityGen::Vector A{2.2f, 2.2f};
-	CityGen::Vector B{1.1f, 1.1f};
-	CityGen::Vector C{0, 0};
+    CityGen::Vector B{1.1f, 1.1f};
+    CityGen::Vector C{0, 0};
 
     CityGen::Region regionA({ A, B, C });
-	CityGen::Region regionB({ C, B, A });
+    CityGen::Region regionB({ C, B, A });
 
     regionA.flip();
 
@@ -46,18 +45,18 @@ TEST_CASE("Region flip tests", "[region]")
 
   SECTION("Region [(2.2f, 2.2f), (1.1f, 1.1f), (0,0)] must be flipped twice")
   {
-	  CityGen::Vector A{ 2.2f, 2.2f };
-	  CityGen::Vector B{ 1.1f, 1.1f };
-	  CityGen::Vector C{ 0, 0 };
+    CityGen::Vector A{ 2.2f, 2.2f };
+    CityGen::Vector B{ 1.1f, 1.1f };
+    CityGen::Vector C{ 0, 0 };
 
-	  CityGen::Region region({ A, B, C });
+    CityGen::Region region({ A, B, C });
 
-	  region.flip();
-	  region.flip();
+    region.flip();
+    region.flip();
 
-	  REQUIRE(region.getVertices()[0] == A);
-	  REQUIRE(region.getVertices()[1] == B);
-	  REQUIRE(region.getVertices()[2] == C);
+    REQUIRE(region.getVertices()[0] == A);
+    REQUIRE(region.getVertices()[1] == B);
+    REQUIRE(region.getVertices()[2] == C);
   }
 }
 
