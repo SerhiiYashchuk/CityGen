@@ -6,7 +6,7 @@ TEST_CASE("Region constructor + getMin() + getMax() tests", "[region]")
 {
   SECTION("Regions must be empty")
   {
-  CityGen::Region region({});
+    CityGen::Region region({});
 
     REQUIRE(region.getVertices().size() == 0);
   }
@@ -67,5 +67,16 @@ TEST_CASE("Region isClockwise tests", "[region]")
     CityGen::Region region({ {0,0}, {1,0}, {1,1}, {0, 1} });
 
     REQUIRE(region.isClockwise());
+  }
+}
+
+TEST_CASE("Region points tests")
+{
+  SECTION("Region must contains (0,0) and (1,1) points")
+  {
+    CityGen::Region region({ {0,0}, {1,0}, {1,1}, {0, 1} });
+
+    REQUIRE(region.containsPoint({ 0,0 }));
+    REQUIRE(region.containsPoint({ 1,1 }));
   }
 }
