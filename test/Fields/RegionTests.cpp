@@ -4,79 +4,76 @@
 
 TEST_CASE("Region constructor + getMin() + getMax() tests", "[region]")
 {
-  SECTION("Regions must be empty")
+  SECTION("Empty region")
   {
     CityGen::Region region({});
 
-    REQUIRE(region.getVertices().size() == 0);
+    CHECK(region.getVertices().size() == 0);
   }
 
-  SECTION("max value must be = (5.5f, 5.4f) and min must be = (-1.0f, 1)")
+  SECTION("Region boundaries")
   {
-    CityGen::Region region({ {-1.0f, 2}, {1, 1}, {2, 2}, {5.4f, 5.4f}, {5.5f, 5.3f} });
+    CityGen::Region region({ {-1.0f, 2.0f}, {1.0f, 1.0f}, {2.0f, 2.0f}, {5.4f, 5.4f}, {5.5f, 5.3f} });
 
-    CHECK(region.getMax().x == 5.5f);
-    REQUIRE(region.getMax().y == 5.4f);
+	CHECK(region.getMin() == CityGen::Vector{ -1.0f, 1.0f });
+	CHECK(region.getMax() == CityGen::Vector{ 5.5f, 5.4f });
 
-    REQUIRE(region.getMin().x == -1.0f);
-    REQUIRE(region.getMin().y == 1);
-
-    REQUIRE(region.getVertices().size() == 5);
+    CHECK(region.getVertices().size() == 5);
   }
 }
 
 TEST_CASE("Region flip tests", "[region]")
 {
-  SECTION("Region [(2.2f, 2.2f), (1.1f, 1.1f), (0,0)] must be flipped to [(0,0), (1.1f, 1.1f), (2.2f, 2.2f)]")
+  SECTION("Flipped region")
   {
     CityGen::Vector A{2.2f, 2.2f};
     CityGen::Vector B{1.1f, 1.1f};
-    CityGen::Vector C{0, 0};
+    CityGen::Vector C{0.0f, 0.0f};
 
     CityGen::Region regionA({ A, B, C });
     CityGen::Region regionB({ C, B, A });
 
     regionA.flip();
 
-    REQUIRE(regionA.getVertices()[0] == regionB.getVertices()[0]);
-    REQUIRE(regionA.getVertices()[1] == regionB.getVertices()[1]);
-    REQUIRE(regionA.getVertices()[2] == regionB.getVertices()[2]);
+    CHECK(regionA.getVertices()[0] == regionB.getVertices()[0]);
+    CHECK(regionA.getVertices()[1] == regionB.getVertices()[1]);
+    CHECK(regionA.getVertices()[2] == regionB.getVertices()[2]);
   }
 
-  SECTION("Region [(2.2f, 2.2f), (1.1f, 1.1f), (0,0)] must be flipped twice")
+  SECTION("Region flipped twice should be equal to initial region")
   {
     CityGen::Vector A{ 2.2f, 2.2f };
     CityGen::Vector B{ 1.1f, 1.1f };
-    CityGen::Vector C{ 0, 0 };
+    CityGen::Vector C{ 0.0f, 0.0f };
 
     CityGen::Region region({ A, B, C });
 
     region.flip();
     region.flip();
 
-    REQUIRE(region.getVertices()[0] == A);
-    REQUIRE(region.getVertices()[1] == B);
-    REQUIRE(region.getVertices()[2] == C);
+    CHECK(region.getVertices()[0] == A);
+    CHECK(region.getVertices()[1] == B);
+    CHECK(region.getVertices()[2] == C);
   }
 }
 
 TEST_CASE("Region isClockwise tests", "[region]")
 {
-  SECTION("Region [(0,0), (1,0), (1,1), (0,1)] must be clockwise", "[region]") 
+  SECTION("Clockwise region", "[region]") 
   {
-    CityGen::Region region({ {0,0}, {1,0}, {1,1}, {0, 1} });
+    CityGen::Region region({ {0,0}, {1,0}, {1,1}, {0,1} });
 
-    REQUIRE(region.isClockwise());
+    CHECK(region.isClockwise());
   }
 }
 
 TEST_CASE("Region points tests")
 {
-  SECTION("Region must contains (0,0) and (1,1) points")
+  SECTION("Region contains appropriate points")
   {
-    CityGen::Region region({ {0,0}, {1,0}, {1,1}, {0, 1} });
+    CityGen::Region region({ {0,0}, {1,0}, {1,1}, {0,1} });
 
-    REQUIRE(region.containsPoint({ 0,0 }));
-    REQUIRE(region.containsPoint({ 1,1 }));
+    CHECK(region.containsPoint({ 0,0 }));
+    CHECK(region.containsPoint({ 1,1 }));
   }
 }
