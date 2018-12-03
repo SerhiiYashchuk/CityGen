@@ -127,12 +127,48 @@ struct Vector
       y /= l;
     }
   }
+
+  static float dotProduct(Vector v1, Vector v2)
+  {
+    return v1.x * v2.x + v1.y * v2.y;
+  }
 };
 
-namespace Utils
+struct Rect
 {
-float dotProduct(Vector v1, Vector v2);
-}
+  Vector topLeft;
+  Vector bottomRight;
+
+  Rect() = default;
+  Rect(Vector topLeft, Vector bottomRight)
+    : topLeft(topLeft), bottomRight(bottomRight)
+  {
+    if (topLeft.x > bottomRight.x)
+    {
+      std::swap(topLeft.x, bottomRight.x);
+    }
+
+    if (topLeft.y > bottomRight.y)
+    {
+      std::swap(topLeft.y, bottomRight.y);
+    }
+  }
+
+  Rect(float left, float top, float right, float bottom)
+    : Rect({ left, top }, { right, bottom }) {}
+
+  bool contains(const Rect &rect) const
+  {
+    return !(topLeft.x > rect.topLeft.x) && !(topLeft.y > rect.topLeft.y) &&
+      !(bottomRight.x < rect.bottomRight.x) && !(bottomRight.y < rect.bottomRight.y);
+  }
+
+  bool intersects(const Rect &rect) const
+  {
+    return !(rect.topLeft.x > bottomRight.x || rect.bottomRight.x < topLeft.x ||
+      rect.topLeft.y > bottomRight.y || rect.bottomRight.y < topLeft.y);
+  }
+};
 }
 
 #endif

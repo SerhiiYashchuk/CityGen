@@ -33,6 +33,7 @@ target_sources(${HYPERSTREAMLINE_LIB_NAME}
 	PRIVATE
 		# Headers
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/GenericTypes.h
+		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/GeometricTree.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Fields/Gradient.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Fields/GridlineTensorField.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Fields/IEigenField.h
@@ -44,13 +45,14 @@ target_sources(${HYPERSTREAMLINE_LIB_NAME}
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Fields/ScaledScalarField.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Fields/Tensor.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Tracing/Graph.h
+		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Tracing/NetworkBuilder.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Tracing/Region.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Tracing/RegionBuilder.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Tracing/Streamline.h
 		# Sources
-		GenericTypes.cpp
 		Fields/Tensor.cpp
 		Tracing/Graph.cpp
+		Tracing/NetworkBuilder.cpp
 		Tracing/Region.cpp
 		Tracing/RegionBuilder.cpp
 		Tracing/Streamline.cpp

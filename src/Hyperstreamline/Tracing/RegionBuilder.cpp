@@ -5,18 +5,15 @@
 
 namespace
 {
-using Vector = CityGen::Vector;
-using Graph = CityGen::Graph;
-
-float signedAngle(Vector v1, Vector v2)
+float signedAngle(CityGen::Vector v1, CityGen::Vector v2)
 {
-  const float dotProduct = CityGen::Utils::dotProduct(v1, v2);
+  const float dotProduct = CityGen::Vector::dotProduct(v1, v2);
   const float cross = v1.x * v2.y - v1.y * v2.x;
 
   return std::atan2(cross, dotProduct);
 }
 
-void removeDeadEnds(std::vector<Graph::VDescriptor> &vertices)
+void removeDeadEnds(std::vector<CityGen::Graph::VDescriptor> &vertices)
 {
   // First step: remove consecutive copies of the same vertices
   // TODO: should we compare exact vertices instead of pointers?

@@ -592,7 +592,7 @@ TEST_CASE("Vectors dot product", "[vector]")
   SECTION("([0,0],[0,0]) must be = 0")
   {
     A.x = A.y = B.x = B.y = 0;
-    REQUIRE(CityGen::Utils::dotProduct(A, B) == 0);
+    REQUIRE(CityGen::Vector::dotProduct(A, B) == 0);
   }
 
   SECTION("([1,1],[0,0]) must be = 0")
@@ -600,7 +600,7 @@ TEST_CASE("Vectors dot product", "[vector]")
     A.x = A.y = 1;
     B.x = B.y = 0;
     
-    REQUIRE(CityGen::Utils::dotProduct(A, B) == 0);
+    REQUIRE(CityGen::Vector::dotProduct(A, B) == 0);
   }
 
   SECTION("([1,1],[1,1]) must be = 2")
@@ -608,6 +608,6 @@ TEST_CASE("Vectors dot product", "[vector]")
     A.x = A.y = 1;
     B.x = B.y = 1;
 
-    REQUIRE(CityGen::Utils::dotProduct(A, B) == 2);
+    REQUIRE(CityGen::Vector::dotProduct(A, B) == 2);
   }
 }

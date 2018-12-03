@@ -17,7 +17,7 @@ namespace Utils
 {
 Vector correctVectorDirection(Vector v, Vector prev)
 {
-  return v == Vector{} || Utils::dotProduct(prev, v) ? v : Vector{ -v.x, -v.y };
+  return v == Vector{} || Vector::dotProduct(prev, v) ? v : Vector{ -v.x, -v.y };
 }
 
 Vector correctedSample(const IVectorField &field, Vector pos, Vector baseDirection)
@@ -50,7 +50,7 @@ Vector traceVectorField(const IVectorField &field, Vector pos, Vector prev, floa
     res += d;
     prev = d;
 
-    if (Utils::dotProduct(first, d / l) < 0.9961)
+    if (Vector::dotProduct(first, d / l) < 0.9961)
       break;
   }
 
