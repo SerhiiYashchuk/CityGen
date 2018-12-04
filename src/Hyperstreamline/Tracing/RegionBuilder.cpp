@@ -13,7 +13,7 @@ float signedAngle(CityGen::Vector v1, CityGen::Vector v2)
   return std::atan2(cross, dotProduct);
 }
 
-void removeDeadEnds(std::vector<CityGen::Graph::VDescriptor> &vertices)
+void removeDeadEnds(std::vector<CityGen::Graph::Vertex> &vertices)
 {
   // First step: remove consecutive copies of the same vertices
   // TODO: should we compare exact vertices instead of pointers?
@@ -88,7 +88,7 @@ void RegionBuilder::buildRegions()
   _regionsBuilt = true;
 }
 
-std::optional<Region> RegionBuilder::walkRegionBoundary(Graph::EDescriptor start, bool moveStreight)
+std::optional<Region> RegionBuilder::walkRegionBoundary(Graph::Edge start, bool moveStreight)
 {
   // TODO: implement
   /*
@@ -102,8 +102,8 @@ std::optional<Region> RegionBuilder::walkRegionBoundary(Graph::EDescriptor start
   */
 
   std::optional<Region> region;
-  std::vector<Graph::VDescriptor> vertices;
-  Graph::EDescriptor e = start;
+  std::vector<Graph::Vertex> vertices;
+  Graph::Edge e = start;
 
   do
   {
@@ -160,10 +160,10 @@ std::optional<Region> RegionBuilder::walkRegionBoundary(Graph::EDescriptor start
   return region;
 }
 
-std::optional<std::pair<Graph::EDescriptor, bool>> RegionBuilder::walkNextEdge(Graph::EDescriptor edge,
+std::optional<std::pair<Graph::Edge, bool>> RegionBuilder::walkNextEdge(Graph::Edge edge,
   bool moveStreight)
 {
-  std::optional<std::pair<Graph::EDescriptor, bool>> nextEdge;
+  std::optional<std::pair<Graph::Edge, bool>> nextEdge;
 
   const auto source = _graph.getSource(edge);
   const auto target = _graph.getTarget(edge);

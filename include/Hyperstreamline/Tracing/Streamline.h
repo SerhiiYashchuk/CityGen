@@ -11,39 +11,39 @@ namespace CityGen
 class Streamline
 {
 public:
-  Streamline(const Graph &graph, Graph::VDescriptor start);
+  Streamline(const Graph &graph, Graph::Vertex start);
 
-  Graph::VDescriptor getFirst() const
+  Graph::Vertex getFirst() const
   {
     return _first;
   }
 
-  Graph::VDescriptor getLast() const
+  Graph::Vertex getLast() const
   {
     return _last;
   }
 
-  bool addVertex(Graph::VDescriptor vertex)
+  bool addVertex(Graph::Vertex vertex)
   {
     return _vertices.insert(vertex).second;
   }
 
-  bool removeVertex(Graph::VDescriptor vertex)
+  bool removeVertex(Graph::Vertex vertex)
   {
     return _vertices.erase(vertex) != 0;
   }
 
-  bool containsVertex(Graph::VDescriptor vertex) const
+  bool containsVertex(Graph::Vertex vertex) const
   {
     return _vertices.find(vertex) != std::end(_vertices);
   }
 
-  std::pair<Graph::VDescriptor, Graph::VDescriptor> extend(Graph::VDescriptor vertex);
+  std::pair<Graph::Vertex, Graph::Vertex> extend(Graph::Vertex vertex);
 
 private:
-  Graph::VDescriptor _first;
-  Graph::VDescriptor _last;
-  std::unordered_set<Graph::VDescriptor> _vertices;
+  Graph::Vertex _first;
+  Graph::Vertex _last;
+  std::unordered_set<Graph::Vertex> _vertices;
 
   const Graph &_graph;
 };

@@ -16,12 +16,12 @@ public:
 
 private:
   void buildRegions();
-  std::optional<Region> walkRegionBoundary(Graph::EDescriptor start, bool moveStreight = true);
-  std::optional<std::pair<Graph::EDescriptor, bool>> walkNextEdge(Graph::EDescriptor edge,
+  std::optional<Region> walkRegionBoundary(Graph::Edge start, bool moveStreight = true);
+  std::optional<std::pair<Graph::Edge, bool>> walkNextEdge(Graph::Edge edge,
     bool moveStreight = true);
 
-  std::vector<Graph::EDescriptor> _unprocessedEdges;
-  std::vector<std::pair<Graph::EDescriptor, bool>> _halfProcessedEdges;
+  std::vector<Graph::Edge> _unprocessedEdges;
+  std::vector<std::pair<Graph::Edge, bool>> _halfProcessedEdges;
   std::vector<Region> _regions;
   const Graph &_graph;
   bool _regionsBuilt = false;

@@ -13,31 +13,31 @@ class Graph
 public:
   using VertexData = Vector;
   using UnderlyingGraph = boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VertexData>;
-  using VDescriptor = typename boost::graph_traits<UnderlyingGraph>::vertex_descriptor;
-  using EDescriptor = typename boost::graph_traits<UnderlyingGraph>::edge_descriptor;
+  using Vertex = typename boost::graph_traits<UnderlyingGraph>::vertex_descriptor;
+  using Edge = typename boost::graph_traits<UnderlyingGraph>::edge_descriptor;
 
   Graph() = default;
   Graph(const std::vector<VertexData> &verticesData);
 
-  VDescriptor addVertex(const VertexData &vertexData);
-  void removeVertex(VDescriptor vertex);
-  std::vector<VDescriptor> getVertices() const;
+  Vertex addVertex(const VertexData &vertexData);
+  void removeVertex(Vertex vertex);
+  std::vector<Vertex> getVertices() const;
   std::size_t getVerticesCount() const;
 
-  std::vector<VDescriptor> getAdjacentVertices(VDescriptor vertex) const;
+  std::vector<Vertex> getAdjacentVertices(Vertex vertex) const;
 
-  VertexData &getData(VDescriptor vertex);
-  const VertexData &getData(VDescriptor vertex) const;
+  VertexData &getData(Vertex vertex);
+  const VertexData &getData(Vertex vertex) const;
 
-  EDescriptor addEdge(VDescriptor vertex1, VDescriptor vertex2);
-  void removeEdge(EDescriptor edge);
-  void removeEdge(VDescriptor vertex1, VDescriptor vertex2);
-  std::optional<EDescriptor> getEdge(VDescriptor vertex1, VDescriptor vertex2) const;
-  std::vector<EDescriptor> getEdges() const;
+  Edge addEdge(Vertex vertex1, Vertex vertex2);
+  void removeEdge(Edge edge);
+  void removeEdge(Vertex vertex1, Vertex vertex2);
+  std::optional<Edge> getEdge(Vertex vertex1, Vertex vertex2) const;
+  std::vector<Edge> getEdges() const;
   std::size_t getEdgesCount() const;
 
-  VDescriptor getSource(EDescriptor edge) const;
-  VDescriptor getTarget(EDescriptor edge) const;
+  Vertex getSource(Edge edge) const;
+  Vertex getTarget(Edge edge) const;
 
 private:
   UnderlyingGraph _graph;

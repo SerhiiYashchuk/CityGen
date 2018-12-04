@@ -4,12 +4,12 @@
 
 namespace CityGen
 {
-Streamline::Streamline(const Graph &graph, Graph::VDescriptor start)
+Streamline::Streamline(const Graph &graph, Graph::Vertex start)
   : _first(start), _last(start), _graph(graph)
 {
 }
 
-std::pair<Graph::VDescriptor, Graph::VDescriptor> Streamline::extend(Graph::VDescriptor vertex)
+std::pair<Graph::Vertex, Graph::Vertex> Streamline::extend(Graph::Vertex vertex)
 {
   if (vertex != _first && !addVertex(vertex))
   {

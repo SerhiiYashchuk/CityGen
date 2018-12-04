@@ -10,20 +10,20 @@ Graph::Graph(const std::vector<Graph::VertexData> &verticesData)
   }
 }
 
-Graph::VDescriptor Graph::addVertex(const Graph::VertexData &vertexData)
+Graph::Vertex Graph::addVertex(const Graph::VertexData &vertexData)
 {
   return boost::add_vertex(vertexData, _graph);
 }
 
-void Graph::removeVertex(Graph::VDescriptor vertex)
+void Graph::removeVertex(Graph::Vertex vertex)
 {
   boost::clear_vertex(vertex, _graph);
   boost::remove_vertex(vertex, _graph);
 }
 
-std::vector<Graph::VDescriptor> Graph::getVertices() const
+std::vector<Graph::Vertex> Graph::getVertices() const
 {
-  std::vector<Graph::VDescriptor> vertices;
+  std::vector<Graph::Vertex> vertices;
 
   const auto vert = boost::vertices(_graph);
 
@@ -40,9 +40,9 @@ std::size_t Graph::getVerticesCount() const
   return boost::num_vertices(_graph);
 }
 
-std::vector<Graph::VDescriptor> Graph::getAdjacentVertices(Graph::VDescriptor vertex) const
+std::vector<Graph::Vertex> Graph::getAdjacentVertices(Graph::Vertex vertex) const
 {
-  std::vector<Graph::VDescriptor> adjacent;
+  std::vector<Graph::Vertex> adjacent;
 
   const auto adj = boost::adjacent_vertices(vertex, _graph);
 
@@ -51,42 +51,37 @@ std::vector<Graph::VDescriptor> Graph::getAdjacentVertices(Graph::VDescriptor ve
     adjacent.push_back(*begin);
   }
 
-  /*std::for_each(adj.first, adj.second, [&adjacent](const auto &it)
-  {
-    adjacent.push_back(*it);
-  });*/
-
   return adjacent;
 }
 
-Graph::VertexData &Graph::getData(Graph::VDescriptor vertex)
+Graph::VertexData &Graph::getData(Graph::Vertex vertex)
 {
   return _graph[vertex];
 }
 
-const Graph::VertexData &Graph::getData(Graph::VDescriptor vertex) const
+const Graph::VertexData &Graph::getData(Graph::Vertex vertex) const
 {
   return _graph[vertex];
 }
 
-Graph::EDescriptor Graph::addEdge(Graph::VDescriptor vertex1, Graph::VDescriptor vertex2)
+Graph::Edge Graph::addEdge(Graph::Vertex vertex1, Graph::Vertex vertex2)
 {
   return boost::add_edge(vertex1, vertex2, _graph).first;
 }
 
-void Graph::removeEdge(Graph::EDescriptor edge)
+void Graph::removeEdge(Graph::Edge edge)
 {
   boost::remove_edge(edge, _graph);
 }
 
-void Graph::removeEdge(Graph::VDescriptor vertex1, Graph::VDescriptor vertex2)
+void Graph::removeEdge(Graph::Vertex vertex1, Graph::Vertex vertex2)
 {
   boost::remove_edge(vertex1, vertex2, _graph);
 }
 
-std::optional<Graph::EDescriptor> Graph::getEdge(Graph::VDescriptor vertex1, Graph::VDescriptor vertex2) const
+std::optional<Graph::Edge> Graph::getEdge(Graph::Vertex vertex1, Graph::Vertex vertex2) const
 {
-  std::optional<Graph::EDescriptor> edge;
+  std::optional<Graph::Edge> edge;
   const auto pair = boost::edge(vertex1, vertex2, _graph);
 
   if (pair.second)
@@ -97,9 +92,9 @@ std::optional<Graph::EDescriptor> Graph::getEdge(Graph::VDescriptor vertex1, Gra
   return edge;
 }
 
-std::vector<Graph::EDescriptor> Graph::getEdges() const
+std::vector<Graph::Edge> Graph::getEdges() const
 {
-  std::vector<Graph::EDescriptor> edges;
+  std::vector<Graph::Edge> edges;
 
   const auto e = boost::edges(_graph);
 
@@ -116,12 +111,12 @@ std::size_t Graph::getEdgesCount() const
   return boost::num_edges(_graph);
 }
 
-Graph::VDescriptor Graph::getSource(Graph::EDescriptor edge) const
+Graph::Vertex Graph::getSource(Graph::Edge edge) const
 {
   return boost::source(edge, _graph);
 }
 
-Graph::VDescriptor Graph::getTarget(Graph::EDescriptor edge) const
+Graph::Vertex Graph::getTarget(Graph::Edge edge) const
 {
   return boost::target(edge, _graph);
 }
