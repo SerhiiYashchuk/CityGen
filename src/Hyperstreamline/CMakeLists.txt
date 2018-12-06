@@ -45,14 +45,12 @@ target_sources(${HYPERSTREAMLINE_LIB_NAME}
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Fields/ScaledScalarField.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Fields/Tensor.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Tracing/Graph.h
-		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Tracing/NetworkBuilder.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Tracing/Region.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Tracing/RegionBuilder.h
 		${CMAKE_SOURCE_DIR}/include/Hyperstreamline/Tracing/Streamline.h
 		# Sources
 		Fields/Tensor.cpp
 		Tracing/Graph.cpp
-		Tracing/NetworkBuilder.cpp
 		Tracing/Region.cpp
 		Tracing/RegionBuilder.cpp
 		Tracing/Streamline.cpp
