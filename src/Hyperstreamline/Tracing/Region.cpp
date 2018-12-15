@@ -76,7 +76,7 @@ Region::Region(std::vector<Vector> vertices)
       [](const auto &lhs, const auto &rhs) { return lhs.y < rhs.y; });
     
     _min = { xMinMax.first->x, yMinMax.first->y };
-    _max = { yMinMax.second->x, yMinMax.second->y };
+    _max = { xMinMax.second->x, yMinMax.second->y };
   }
 }
 
@@ -88,7 +88,7 @@ bool Region::isClockwise() const
   {
     const Vector &a = _vertices[i];
     const Vector &b = _vertices[(i + 1) % _vertices.size()];
-    const float n = (b.x - a.x) * (b.y - a.y);
+    const float n = (b.x - a.x) * (b.y + a.y);
 
     sum += n;
   }
