@@ -2,7 +2,19 @@
 #include "Tracing/Region.h"
 #include "GenericTypes.h"
 
-TEST_CASE("Region constructor + getMin() + getMax() tests", "[region]")
+namespace Catch
+{
+template<>
+struct StringMaker<CityGen::Vector>
+{
+  static std::string convert(const CityGen::Vector &v)
+  {
+    return "{" + std::to_string(v.x) + ", " + std::to_string(v.y) + "}";
+  }
+};
+}
+
+TEST_CASE("Region construction and bounds tests", "[region]")
 {
   SECTION("Empty region")
   {
@@ -15,8 +27,8 @@ TEST_CASE("Region constructor + getMin() + getMax() tests", "[region]")
   {
     CityGen::Region region({ {-1.0f, 2.0f}, {1.0f, 1.0f}, {2.0f, 2.0f}, {5.4f, 5.4f}, {5.5f, 5.3f} });
 
-	CHECK(region.getMin() == CityGen::Vector{ -1.0f, 1.0f });
-	CHECK(region.getMax() == CityGen::Vector{ 5.5f, 5.4f });
+    CHECK(region.getMin() == CityGen::Vector{ -1.0f, 1.0f });
+    CHECK(region.getMax() == CityGen::Vector{ 5.5f, 5.4f });
 
     CHECK(region.getVertices().size() == 5);
   }
@@ -26,9 +38,9 @@ TEST_CASE("Region flip tests", "[region]")
 {
   SECTION("Flipped region")
   {
-    CityGen::Vector A{2.2f, 2.2f};
-    CityGen::Vector B{1.1f, 1.1f};
-    CityGen::Vector C{0.0f, 0.0f};
+    CityGen::Vector A = { 2.2f, 2.2f };
+    CityGen::Vector B = { 1.1f, 1.1f };
+    CityGen::Vector C = { 0.0f, 0.0f };
 
     CityGen::Region regionA({ A, B, C });
     CityGen::Region regionB({ C, B, A });
@@ -42,9 +54,9 @@ TEST_CASE("Region flip tests", "[region]")
 
   SECTION("Region flipped twice should be equal to initial region")
   {
-    CityGen::Vector A{ 2.2f, 2.2f };
-    CityGen::Vector B{ 1.1f, 1.1f };
-    CityGen::Vector C{ 0.0f, 0.0f };
+    CityGen::Vector A = { 2.2f, 2.2f };
+    CityGen::Vector B = { 1.1f, 1.1f };
+    CityGen::Vector C = { 0.0f, 0.0f };
 
     CityGen::Region region({ A, B, C });
 
@@ -61,7 +73,11 @@ TEST_CASE("Region isClockwise tests", "[region]")
 {
   SECTION("Clockwise region", "[region]") 
   {
-    CityGen::Region region({ {0,0}, {1,0}, {1,1}, {0,1} });
+    CityGen::Region region({ {0, 0}, {1, 0}, {1, 1}, {0, 1} });
+
+    CHECK(!region.isClockwise());
+
+    region.flip();
 
     CHECK(region.isClockwise());
   }
@@ -71,9 +87,9 @@ TEST_CASE("Region points tests")
 {
   SECTION("Region contains appropriate points")
   {
-    CityGen::Region region({ {0,0}, {1,0}, {1,1}, {0,1} });
+    CityGen::Region region({ {0, 0}, {1, 0}, {1, 1}, {0, 1} });
 
-    CHECK(region.containsPoint({ 0,0 }));
-    CHECK(region.containsPoint({ 1,1 }));
+    CHECK(region.containsPoint({ 0, 0 }));
+    CHECK(region.containsPoint({ 1, 1 }));
   }
 }
