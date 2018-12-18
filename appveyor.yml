@@ -8,7 +8,7 @@ configuration:
   - Debug
 
 environment:
-  BOOST_ROOT: c:/libraries/boost_1_68_0
+  BOOST_ROOT: c:/libraries/boost_1_67_0
 
 build_script:
 - mkdir build
