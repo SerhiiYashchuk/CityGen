@@ -1,0 +1,33 @@
+image:
+  - Visual Studio 2017
+
+platform:
+  - x86
+
+configuration:
+  - Debug
+
+environment:
+  BOOST_ROOT: c:/libraries/boost_1_67_0
+
+build_script:
+- cd c:/projects/CityGen
+- mkdir build
+- cd build
+- cmake -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake c:/projects/CityGen -DBOOST_ROOT="%BOOST_ROOT%" -G "Visual Studio 15"
+- cmake --build .
+
+install:
+- cd c:/tools/vcpkg
+- vcpkg integrate install
+- vcpkg install catch2 sfml
+
+cache: c:/tools/vcpkg/installed/
+
+notifications:
+- provider: Email
+  to:
+  - '{{commitAuthorEmail}}'
+  on_build_success: false
+  on_build_failure: true
+  on_build_status_changed: false
