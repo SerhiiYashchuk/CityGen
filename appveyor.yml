@@ -19,7 +19,7 @@ build_script:
 install:
 - cd c:/tools/vcpkg
 - vcpkg integrate install
-- vcpkg install catch2 #sfml
+- vcpkg install catch2 sfml
 
 cache: c:/tools/vcpkg/installed/
 
