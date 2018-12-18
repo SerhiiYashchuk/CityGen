@@ -11,8 +11,6 @@ add_executable(${PROJECT_NAME})
 
 # SFML package
 find_package(SFML COMPONENTS system window graphics REQUIRED)
- target_link_libraries(${PROJECT_NAME} PRIVATE FLAC OpenAL OpenGL Vorbis)
-
 
 if(MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /W4)
@@ -40,9 +38,9 @@ target_sources(${PROJECT_NAME}
 
 	PRIVATE
 		# Headers
-		include/graphVisualization.h
+		include/GraphVisualization.h
 		# Sources
-		src/graphVisualization.cpp
+		src/GraphVisualization.cpp
 		main.cpp
 )
 

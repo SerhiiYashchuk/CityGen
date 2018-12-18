@@ -30,9 +30,13 @@ int main(int /*argc*/, char const * /*argv[]*/)
   graph.addEdge(0, 3);
   graph.addEdge(3, 5);
 
-  float vertexRadius = 20.0f;
-  std::vector<sf::CircleShape> vertices = CityGen::createVertices(graph, sf::Color::Red, vertexRadius);
-  std::vector<sf::VertexArray> edges = CityGen::getEdgesPositions(graph, vertexRadius);
+  const float vertexRadius = 20.0f;
+
+  std::vector<CityGen::Vector> verticesPositions = getVerticesPositions(graph);
+  std::vector<CityGen::Graph::Edge> edgesIdices = graph.getEdges();
+
+  std::vector<sf::CircleShape> vertices = CityGen::createVertices(verticesPositions, sf::Color::Red, vertexRadius);
+  std::vector<sf::VertexArray> edges = CityGen::createEdges(edgesIdices, verticesPositions, vertexRadius);
   
   while (isRunning)
   {
