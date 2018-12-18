@@ -7,11 +7,14 @@ platform:
 configuration:
   - Debug
 
+environment:
+  BOOST_ROOT: c:/libraries/boost_1_69_0
+
 build_script:
 - mkdir build
 - cd build
-- cmake c:/projects/CityGen -G "Visual Studio 15"
-- cmake --build . -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake
+- cmake -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake c:/projects/CityGen -DBOOST_ROOT="%BOOST_ROOT%" -G "Visual Studio 15"
+- cmake --build .
 
 install:
 - cd c:/tools/vcpkg
@@ -19,3 +22,11 @@ install:
 - vcpkg install catch2 sfml
 
 cache: c:/tools/vcpkg/installed/
+
+notifications:
+- provider: Email
+  to:
+  - '{{commitAuthorEmail}}'
+  on_build_success: false
+  on_build_failure: true
+  on_build_status_changed: false
