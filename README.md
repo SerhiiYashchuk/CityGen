@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/27urplajamdjcs67?svg=true)](https://ci.appveyor.com/project/SerhiiYashchuk/citygen)
+
 # Project description
 **CityGen** is the interactive system for procedural city generation.
 
