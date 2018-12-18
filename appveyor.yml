@@ -17,9 +17,9 @@ build_script:
 - cmake --build .
 
 install:
-#- cd c:/tools/vcpkg
-#- vcpkg integrate install
-#- vcpkg install catch2 sfml
+- cd c:/tools/vcpkg
+- vcpkg integrate install
+- vcpkg install catch2 #sfml
 
 cache: c:/tools/vcpkg/installed/
 
