@@ -16,25 +16,38 @@ namespace CityGen
     return verticesPositions;
   }
 
+  Vector getVertexPosition(const Graph & graph, Graph::Vertex vertexIndex)
+  {
+	  return graph.getData(vertexIndex);
+  }
+
   std::vector<sf::CircleShape> createVertices(const std::vector<Vector> & verticesPositions,
-    sf::Color color, float vertexSize)
+   const sf::Color color, const float vertexRadius)
   {
     std::vector<sf::CircleShape> vertices;
 
   for (const auto vertexPosition : verticesPositions)
   {
-    sf::CircleShape vertex(vertexSize);
-    vertex.setPosition(vertexPosition.x, vertexPosition.y);
-    vertex.setFillColor(color);
-
-    vertices.push_back(vertex);
+    vertices.push_back(createVertex(vertexPosition, color, vertexRadius));
   }
 
     return vertices;
   }
 
+  sf::CircleShape createVertex(const Vector& vertexPosition, const sf::Color color, const float vertexRadius)
+  {
+	  sf::CircleShape vertex(vertexRadius);
+	  vertex.setPosition(vertexPosition.x - vertexRadius, vertexPosition.y - vertexRadius);
+	  vertex.setFillColor(color);
+
+	  vertex.setOutlineThickness(vertexRadius/10.0f);
+	  vertex.setOutlineColor(sf::Color::White);
+
+	  return vertex;
+  }
+
   std::vector<sf::VertexArray> createEdges(const std::vector<Graph::Edge> & edges,
-    const std::vector<Vector> & verticesPositions, float vertexRadius)
+    const std::vector<Vector> & verticesPositions, const float vertexRadius)
   {
     std::vector<sf::VertexArray> edgesPositions;
 
@@ -42,8 +55,8 @@ namespace CityGen
     {
       edgesPositions.push_back(sf::VertexArray(sf::Lines, 2));
 
-      edgesPositions[i][0].position = sf::Vector2f(verticesPositions[edges[i].m_source].x + vertexRadius, verticesPositions[edges[i].m_source].y + vertexRadius);
-      edgesPositions[i][1].position = sf::Vector2f(verticesPositions[edges[i].m_target].x + vertexRadius, verticesPositions[edges[i].m_target].y + vertexRadius);
+      edgesPositions[i][0].position = sf::Vector2f(verticesPositions[edges[i].m_source].x, verticesPositions[edges[i].m_source].y);
+      edgesPositions[i][1].position = sf::Vector2f(verticesPositions[edges[i].m_target].x, verticesPositions[edges[i].m_target].y);
     }
 
     return edgesPositions;

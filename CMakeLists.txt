@@ -12,36 +12,42 @@ add_executable(${PROJECT_NAME})
 # SFML package
 find_package(SFML COMPONENTS system window graphics REQUIRED)
 
+# ImGui package
+find_package(milerius-sfml-imgui CONFIG REQUIRED)
+
 if(MSVC)
-	target_compile_options(${PROJECT_NAME} PRIVATE /W4)
+  target_compile_options(${PROJECT_NAME} PRIVATE /W4)
 else()
-	target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+  target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
 target_include_directories(${PROJECT_NAME}
-	PUBLIC
-		include
-	PRIVATE
-		src
+  PUBLIC
+    include
+  PRIVATE
+    src
 )
 
 target_link_libraries(${PROJECT_NAME}
-	PUBLIC
-		sfml-graphics
-		opengl32
-	PRIVATE
-		${HYPERSTREAMLINE_LIB_NAME}
+  PUBLIC
+    sfml-graphics
+    opengl32
+    sfml-imgui::sfml-imgui
+  PRIVATE
+    ${HYPERSTREAMLINE_LIB_NAME}
 )
 
 target_sources(${PROJECT_NAME}
-	PUBLIC
+  PUBLIC
 
-	PRIVATE
-		# Headers
-		include/GraphVisualization.h
-		# Sources
-		src/GraphVisualization.cpp
-		main.cpp
+  PRIVATE
+    # Headers
+    include/GraphVisualization.h
+	include/UI.h
+    # Sources
+    src/GraphVisualization.cpp
+	src/UI.cpp
+    main.cpp
 )
 
 add_subdirectory(test)
