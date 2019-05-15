@@ -10,6 +10,8 @@ configuration:
 environment:
   BOOST_ROOT: c:/libraries/boost_1_67_0
 
+clone_folder: c:/projects/CityGen
+
 build_script:
 - cd c:/projects/CityGen
 - mkdir build
