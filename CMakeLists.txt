@@ -2,18 +2,16 @@
 
 project("CityGen")
 
+# ImGui-SFML
+set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/imgui)
+add_subdirectory(ThirdParty/imgui-sfml)
+
 # Hyperstreamline library
 set(HYPERSTREAMLINE_LIB_NAME Hyperstreamline)
 add_subdirectory(src/Hyperstreamline)
 
 # CityGen
 add_executable(${PROJECT_NAME})
-
-# SFML package
-find_package(SFML COMPONENTS system window graphics REQUIRED)
-
-# ImGui package
-find_package(milerius-sfml-imgui CONFIG REQUIRED)
 
 if(MSVC)
   target_compile_options(${PROJECT_NAME} PRIVATE /W4)
@@ -22,19 +20,19 @@ else()
 endif()
 
 target_include_directories(${PROJECT_NAME}
-  PUBLIC
-    include
-  PRIVATE
-    src
+	PUBLIC
+		include
+	PRIVATE
+		src
+		ThirdParty
 )
 
 target_link_libraries(${PROJECT_NAME}
-  PUBLIC
-    sfml-graphics
-    opengl32
-    sfml-imgui::sfml-imgui
-  PRIVATE
-    ${HYPERSTREAMLINE_LIB_NAME}
+	PUBLIC
+
+	PRIVATE
+		${HYPERSTREAMLINE_LIB_NAME}
+		ImGui-SFML::ImGui-SFML
 )
 
 target_sources(${PROJECT_NAME}

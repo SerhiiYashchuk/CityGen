@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include <imgui.h>
-#include <sfml-imgui/imgui-SFML.hpp>
+#include "imgui/imgui.h"
+#include "imgui-sfml/imgui-SFML.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
@@ -21,7 +21,7 @@ int main(int /*argc*/, char const * /*argv[]*/)
 
   sf::View view;
   view.setCenter(sf::Vector2f(0.0f, 0.0f));
-  view.setSize(windowSize.x, windowSize.y);
+  view.setSize(static_cast<float>(windowSize.x), static_cast<float>(windowSize.y));
 
   window.setView(view);
 
@@ -80,7 +80,8 @@ int main(int /*argc*/, char const * /*argv[]*/)
       {
         windowSize = window.getSize();
 
-        sf::FloatRect resizedArea(-(event.size.width / 2.0f), -(event.size.height / 2.0f), event.size.width, event.size.height);
+        sf::FloatRect resizedArea(-(event.size.width / 2.0f), -(event.size.height / 2.0f),
+          static_cast<float>(event.size.width), static_cast<float>(event.size.height));
         window.setView(sf::View(resizedArea));
 
         std::cout << " - Window has been resised -> (" << windowSize.x << ", " << windowSize.y << ")" << std::endl;
@@ -103,6 +104,7 @@ int main(int /*argc*/, char const * /*argv[]*/)
             vertices.push_back(vertex);
 
             std::cout << "vertex coord: (" << vertexPosition.x << ", " << vertexPosition.y << ")" << std::endl;
+          }
         }
       }
       break;
