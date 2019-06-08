@@ -23,6 +23,9 @@ install:
 - cd c:/tools/vcpkg
 - vcpkg integrate install
 - vcpkg install catch2 sfml
+- cd c:/projects/CityGen
+- git submodule init
+- git submodule update
 
 cache: c:/tools/vcpkg/installed/
 
