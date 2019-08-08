@@ -17,4 +17,15 @@ namespace CityGen
 		view.move(offsetCoords);
 		window.setView(view);
 	}
+
+
+	void moveViewTo(sf::RenderWindow& window, const sf::Vector2f displacement)
+	{
+		sf::View view(window.getView());
+
+		view.move(displacement);
+
+		window.setView(view);
+	}
+
 }
